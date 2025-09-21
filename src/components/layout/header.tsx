@@ -12,6 +12,7 @@ import { BookOpenCheck, Menu, School } from "lucide-react";
 const navLinks = [
   { href: "/student", label: "Student" },
   { href: "/teacher", label: "Teacher" },
+  { href: "/#features", label: "Features" },
   { href: "/#impact", label: "Impact" },
   { href: "/#team", label: "Team" },
   { href: "/#contact", label: "Contact" },
