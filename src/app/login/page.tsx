@@ -146,6 +146,10 @@ export default function LoginPage() {
       });
       router.push("/student");
     } catch (error: any) {
+      if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+        console.log("Google Sign-In cancelled by user.");
+        return;
+      }
       console.error("Google Sign-In Error: ", error);
       toast({
         title: "Google Sign-In Failed",
