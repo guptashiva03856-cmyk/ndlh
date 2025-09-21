@@ -16,6 +16,29 @@ const navLinks = [
   { href: "/student/quizzes", label: "Quizzes" },
 ];
 
+function AuthButtons() {
+    const [isMounted, setIsMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    if (!isMounted) {
+        return null;
+    }
+
+    return (
+        <>
+            <Button variant="ghost" asChild>
+                <Link href="/login">Login</Link>
+            </Button>
+            <Button asChild>
+                <Link href="/signup">Sign Up</Link>
+            </Button>
+        </>
+    );
+}
+
 export function Header() {
   const pathname = usePathname();
 
@@ -43,12 +66,7 @@ export function Header() {
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2">
-           <Button variant="ghost" asChild>
-                <Link href="/login">Login</Link>
-            </Button>
-            <Button asChild>
-                <Link href="/signup">Sign Up</Link>
-            </Button>
+           <AuthButtons />
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
