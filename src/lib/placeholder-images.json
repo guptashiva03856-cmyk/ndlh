@@ -1,3 +1,40 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-image",
+      "description": "A vibrant image of students learning in a rural classroom.",
+      "imageUrl": "https://picsum.photos/seed/ndlh-hero/1920/1080",
+      "imageHint": "students school"
+    },
+    {
+      "id": "impact-image",
+      "description": "An inspiring photo of a child engaged in digital learning.",
+      "imageUrl": "https://picsum.photos/seed/ndlh-impact/800/600",
+      "imageHint": "children learning"
+    },
+    {
+      "id": "team-member-1",
+      "description": "Professional portrait of a team member.",
+      "imageUrl": "https://picsum.photos/seed/ndlh-team1/200/200",
+      "imageHint": "portrait professional"
+    },
+    {
+      "id": "team-member-2",
+      "description": "Professional portrait of a team member.",
+      "imageUrl": "https://picsum.photos/seed/ndlh-team2/200/200",
+      "imageHint": "portrait professional"
+    },
+    {
+      "id": "team-member-3",
+      "description": "Professional portrait of a team member.",
+      "imageUrl": "https://picsum.photos/seed/ndlh-team3/200/200",
+      "imageHint": "portrait professional"
+    },
+    {
+      "id": "team-member-4",
+      "description": "Professional portrait of a team member.",
+      "imageUrl": "https://picsum.photos/seed/ndlh-team4/200/200",
+      "imageHint": "portrait professional"
+    }
+  ]
 }
