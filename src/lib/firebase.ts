@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 
 const firebaseConfig = {
   projectId: "studio-4419974401-b38f6",
@@ -13,4 +13,4 @@ const firebaseConfig = {
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 
-export { app, auth, GoogleAuthProvider, signInWithPopup };
+export { app, auth, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber };
