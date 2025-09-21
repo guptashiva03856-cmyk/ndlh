@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth, GoogleAuthProvider, signInWithPopup } from "@/lib/firebase";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { Separator } from "@/components/ui/separator";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
@@ -51,12 +52,31 @@ export default function LoginPage() {
     } catch (error: any) {
       console.error("Login Error: ", error);
       let errorMessage = "An unknown error occurred.";
-      if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password" || error.code === "auth/invalid-credential") {
+      if (error.code === "auth/invalid-credential") {
         errorMessage = "Invalid email or password. Please try again.";
       }
       toast({
         title: "Login Failed",
         description: errorMessage,
+        variant: "destructive",
+      });
+    }
+  }
+
+  async function handleGoogleSignIn() {
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      toast({
+        title: "Google Sign-In Successful",
+        description: "Redirecting to your dashboard...",
+      });
+      router.push("/student");
+    } catch (error: any) {
+      console.error("Google Sign-In Error: ", error);
+      toast({
+        title: "Google Sign-In Failed",
+        description: "Could not sign in with Google. Please try again.",
         variant: "destructive",
       });
     }
@@ -117,6 +137,16 @@ export default function LoginPage() {
               </Button>
             </form>
           </Form>
+
+          <div className="relative my-4">
+            <Separator />
+            <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-2 text-sm text-muted-foreground">OR</span>
+          </div>
+          
+          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn}>
+            Login with Google
+          </Button>
+
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
             <Link href="/signup" className="underline">
