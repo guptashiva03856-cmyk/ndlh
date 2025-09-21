@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { BookOpenCheck, Menu, School } from "lucide-react";
+import { Menu, School } from "lucide-react";
 
 const navLinks = [
   { href: "/student", label: "Student" },
@@ -17,44 +17,10 @@ const navLinks = [
 ];
 
 export function Header() {
-  const [scrolled, setScrolled] = React.useState(false);
   const pathname = usePathname();
 
-  React.useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const renderNavLink = (href: string, label: string, className?: string) => {
-    const isActive = pathname.startsWith(href) && href !== '/';
-    const isHomeActive = pathname === '/' && href === '/';
-
-    return (
-      <Link
-        href={href}
-        className={cn(
-          "transition-colors hover:text-primary",
-          (isActive || isHomeActive) ? "text-primary font-semibold" : "text-muted-foreground",
-          className
-        )}
-      >
-        {label}
-      </Link>
-    );
-  };
-
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 w-full border-b border-border/0 transition-all duration-300",
-        scrolled
-          ? "border-border/40 bg-background/95 backdrop-blur-sm"
-          : "bg-transparent"
-      )}
-    >
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-sm">
       <div className="container flex h-20 items-center">
         <Link href="/" className="mr-6 flex items-center space-x-2">
           <School className="h-7 w-7 text-primary" />
