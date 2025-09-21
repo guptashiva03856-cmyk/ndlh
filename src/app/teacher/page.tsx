@@ -1,8 +1,24 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/use-auth";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { UploadCloud, FilePenLine, BarChart3 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function TeacherPage() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login");
+    }
+  }, [user, loading, router]);
+
+
   const sections = [
     {
       href: "/teacher/upload-lesson",
@@ -23,6 +39,32 @@ export default function TeacherPage() {
       description: "Track student progress",
     },
   ];
+  
+  if (loading || !user) {
+    return (
+       <div className="container py-12">
+        <header className="mb-8">
+          <Skeleton className="h-10 w-3/5" />
+          <Skeleton className="h-6 w-2/5 mt-2" />
+        </header>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, i) => (
+             <Card key={i}>
+                <CardHeader>
+                  <div className="flex items-center gap-4">
+                     <Skeleton className="w-8 h-8 rounded-full" />
+                    <div>
+                      <Skeleton className="h-5 w-24" />
+                      <Skeleton className="h-4 w-32 mt-1" />
+                    </div>
+                  </div>
+                </CardHeader>
+              </Card>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-12">

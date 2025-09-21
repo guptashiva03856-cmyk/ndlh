@@ -1,8 +1,23 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/use-auth";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { BookOpen, Gamepad2, ClipboardCheck, Bot } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function StudentPage() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login");
+    }
+  }, [user, loading, router]);
+
   const sections = [
     {
       href: "/student/lessons",
@@ -29,6 +44,32 @@ export default function StudentPage() {
       description: "Ask me anything!",
     },
   ];
+
+  if (loading || !user) {
+    return (
+       <div className="container py-12">
+        <header className="mb-8">
+          <Skeleton className="h-10 w-3/5" />
+          <Skeleton className="h-6 w-2/5 mt-2" />
+        </header>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[...Array(4)].map((_, i) => (
+             <Card key={i}>
+                <CardHeader>
+                  <div className="flex items-center gap-4">
+                     <Skeleton className="w-8 h-8 rounded-full" />
+                    <div>
+                      <Skeleton className="h-5 w-24" />
+                      <Skeleton className="h-4 w-32 mt-1" />
+                    </div>
+                  </div>
+                </CardHeader>
+              </Card>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-12">
