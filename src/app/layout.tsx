@@ -1,22 +1,17 @@
 import type { Metadata } from 'next';
-import { Poppins, PT_Sans } from 'next/font/google';
+import { Onest } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from "@/components/ui/toaster";
 
-const poppins = Poppins({
+const onest = Onest({
   subsets: ['latin'],
-  weight: ['400', '600', '700'],
+  weight: ['400', '600', '700', '900'],
   variable: '--font-headline',
 });
 
-const ptSans = PT_Sans({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-body',
-});
 
 export const metadata: Metadata = {
   title: 'Nabha Digital Learning Hub',
@@ -32,9 +27,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          'min-h-screen bg-background font-body antialiased',
-          poppins.variable,
-          ptSans.variable
+          'min-h-screen bg-background font-headline antialiased',
+          onest.variable
         )}
       >
         <div className="relative flex min-h-screen flex-col">

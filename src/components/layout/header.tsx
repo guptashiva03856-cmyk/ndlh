@@ -11,11 +11,9 @@ import { BookOpenCheck, Menu, School } from "lucide-react";
 
 const navLinks = [
   { href: "/student", label: "Student" },
-  { href: "/teacher", label: "Teacher" },
-  { href: "/#features", label: "Features" },
-  { href: "/#impact", label: "Impact" },
-  { href: "/#team", label: "Team" },
-  { href: "/#contact", label: "Contact" },
+  { href: "/student/lessons", label: "Lessons" },
+  { href: "/student/games", label: "Games" },
+  { href: "/student/quizzes", label: "Quizzes" },
 ];
 
 export function Header() {
@@ -31,13 +29,15 @@ export function Header() {
   }, []);
 
   const renderNavLink = (href: string, label: string, className?: string) => {
-    const isActive = pathname === href;
+    const isActive = pathname.startsWith(href) && href !== '/';
+    const isHomeActive = pathname === '/' && href === '/';
+
     return (
       <Link
         href={href}
         className={cn(
           "transition-colors hover:text-primary",
-          isActive ? "text-primary font-semibold" : "text-muted-foreground",
+          (isActive || isHomeActive) ? "text-primary font-semibold" : "text-muted-foreground",
           className
         )}
       >
@@ -49,16 +49,16 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full border-b border-transparent transition-all duration-300",
+        "sticky top-0 z-50 w-full border-b border-border/0 transition-all duration-300",
         scrolled
           ? "border-border/40 bg-background/95 backdrop-blur-sm"
-          : "bg-background/0"
+          : "bg-transparent"
       )}
     >
-      <div className="container flex h-16 items-center">
+      <div className="container flex h-20 items-center">
         <Link href="/" className="mr-6 flex items-center space-x-2">
-          <School className="h-6 w-6 text-primary" />
-          <span className="font-bold font-headline inline-block">
+          <School className="h-7 w-7 text-primary" />
+          <span className="font-bold text-lg font-headline inline-block">
             NDLH
           </span>
         </Link>
