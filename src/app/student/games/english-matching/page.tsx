@@ -31,7 +31,8 @@ type Item = {
 };
 
 const shuffleArray = (array: any[]) => {
-    return array.sort(() => Math.random() - 0.5);
+    // Creates a new shuffled array
+    return [...array].sort(() => Math.random() - 0.5);
 };
 
 export default function EnglishMatchingGame() {
@@ -51,6 +52,7 @@ export default function EnglishMatchingGame() {
     const resetGame = () => {
         const words = terms.map((t, i) => ({ id: i, text: t.word, type: 'word' as const, pairId: i }));
         const definitions = terms.map((t, i) => ({ id: i + terms.length, text: t.definition, type: 'definition' as const, pairId: i }));
+        // Shuffle is now happening inside useEffect via resetGame, which is only called on client
         setItems(shuffleArray([...words, ...definitions]));
         setSelectedWord(null);
         setSelectedDef(null);
@@ -87,7 +89,7 @@ export default function EnglishMatchingGame() {
     }, [selectedWord, selectedDef]);
 
     useEffect(() => {
-        if (matchedPairs.length === terms.length && terms.length > 0) {
+        if (matchedPairs.length > 0 && matchedPairs.length === terms.length) {
             setShowWinDialog(true);
         }
     }, [matchedPairs]);
@@ -106,6 +108,7 @@ export default function EnglishMatchingGame() {
     };
     
     if (!isClient) {
+        // Render nothing or a loading spinner on the server
         return null;
     }
 
