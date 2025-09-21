@@ -63,7 +63,11 @@ export function Header() {
           </span>
         </Link>
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          {navLinks.map((link) => renderNavLink(link.href, link.label))}
+          {navLinks.map((link) => (
+            <React.Fragment key={link.href}>
+              {renderNavLink(link.href, link.label)}
+            </React.Fragment>
+          ))}
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="hidden md:flex items-center space-x-2">
@@ -89,9 +93,11 @@ export function Header() {
                 </span>
               </Link>
               <div className="flex flex-col space-y-4">
-                {navLinks.map((link) =>
-                  renderNavLink(link.href, link.label, "text-lg")
-                )}
+                {navLinks.map((link) => (
+                  <React.Fragment key={link.href}>
+                    {renderNavLink(link.href, link.label, "text-lg")}
+                  </React.Fragment>
+                ))}
               </div>
               <div className="mt-6 flex flex-col space-y-2">
                  <Button variant="outline" asChild>
