@@ -5,9 +5,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-import { createUserWithEmailAndPassword, ConfirmationResult } from "firebase/auth";
-import { auth, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "@/lib/firebase";
-import { useState, useEffect } from "react";
+import { createUserWithEmailAndPassword, ConfirmationResult, RecaptchaVerifier } from "firebase/auth";
+import { auth, GoogleAuthProvider, signInWithPopup, signInWithPhoneNumber } from "@/lib/firebase";
+import { useState, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -53,12 +53,16 @@ export default function SignupPage() {
   const router = useRouter();
   const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
   const [showOtpForm, setShowOtpForm] = useState(false);
+  const recaptchaVerifierRef = useRef<RecaptchaVerifier | null>(null);
+  const recaptchaContainerRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container-signup', {
-      'size': 'invisible',
-    });
-  }, []);
+  const setupRecaptcha = () => {
+    if (!recaptchaVerifierRef.current && recaptchaContainerRef.current) {
+        recaptchaVerifierRef.current = new RecaptchaVerifier(auth, recaptchaContainerRef.current, {
+            'size': 'invisible',
+        });
+    }
+  }
 
   const emailForm = useForm<z.infer<typeof emailFormSchema>>({
     resolver: zodResolver(emailFormSchema),
@@ -98,7 +102,12 @@ export default function SignupPage() {
   }
 
   async function onPhoneSubmit(values: z.infer<typeof phoneFormSchema>) {
-    const appVerifier = window.recaptchaVerifier;
+    setupRecaptcha();
+    const appVerifier = recaptchaVerifierRef.current;
+    if (!appVerifier) {
+        toast({ title: "reCAPTCHA not initialized", description: "Please try again.", variant: "destructive" });
+        return;
+    }
     // Ensure phone number is in E.164 format
     const phoneNumber = values.phone.startsWith('+') ? values.phone : `+91${values.phone}`;
     try {
@@ -291,7 +300,7 @@ export default function SignupPage() {
                 </TabsContent>
             </Tabs>
           
-          <div id="recaptcha-container-signup"></div>
+          <div ref={recaptchaContainerRef}></div>
 
           <div className="relative my-4">
             <Separator />
