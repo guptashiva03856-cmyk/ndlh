@@ -96,8 +96,10 @@ export default function LoginPage() {
 
   async function onPhoneSubmit(values: z.infer<typeof phoneFormSchema>) {
     const appVerifier = window.recaptchaVerifier;
+    // Ensure phone number is in E.164 format
+    const phoneNumber = values.phone.startsWith('+') ? values.phone : `+91${values.phone}`;
     try {
-        const result = await signInWithPhoneNumber(auth, values.phone, appVerifier);
+        const result = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
         setConfirmationResult(result);
         setShowOtpForm(true);
         toast({
