@@ -51,9 +51,9 @@ export default function SignupPage() {
       router.push("/login");
     } catch (error: any) {
       console.error("Signup Error:", error);
-      let errorMessage = "An unexpected error occurred.";
+      let errorMessage = "An unexpected error occurred. Please try again.";
       if (error.code === "auth/email-already-in-use") {
-        errorMessage = "This email address is already in use.";
+        errorMessage = "This email address is already in use. Please try a different email or log in.";
       }
       toast({
         title: "Sign-up Failed",
