@@ -37,6 +37,44 @@ function AuthButtons() {
     );
 }
 
+function NavLinks() {
+  const pathname = usePathname();
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  React.useEffect(() => {
+      setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+      // Render placeholder or nothing on the server
+      return (
+        <div className="flex items-center space-x-6 text-sm font-medium">
+            {navLinks.map((link) => (
+                <span key={link.href} className="text-muted-foreground">{link.label}</span>
+            ))}
+        </div>
+      );
+  }
+
+  return (
+    <>
+      {navLinks.map((link) => (
+        <Link
+          key={link.href}
+          href={link.href}
+          className={cn(
+            "transition-colors hover:text-primary",
+            pathname.startsWith(link.href) ? "text-primary font-semibold" : "text-muted-foreground"
+          )}
+        >
+          {link.label}
+        </Link>
+      ))}
+    </>
+  );
+}
+
+
 export function Header() {
   const pathname = usePathname();
 
@@ -50,18 +88,7 @@ export function Header() {
           </span>
         </Link>
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "transition-colors hover:text-primary",
-                pathname.startsWith(link.href) ? "text-primary font-semibold" : "text-muted-foreground"
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
+          <NavLinks />
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2">
            <AuthButtons />
