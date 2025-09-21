@@ -2,12 +2,24 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { useAuth } from "@/hooks/use-auth";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, School } from "lucide-react";
+import { Menu, School, LogOut } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navLinks = [
   { href: "/student", label: "Student" },
@@ -15,47 +27,63 @@ const navLinks = [
 ];
 
 function AuthButtons() {
-    const [isMounted, setIsMounted] = React.useState(false);
+  const { user, loading } = useAuth();
+  const router = useRouter();
 
-    React.useEffect(() => {
-        setIsMounted(true);
-    }, []);
+  const handleLogout = async () => {
+    await signOut(auth);
+    router.push("/");
+  };
+  
+  if (loading) {
+    return null;
+  }
 
-    if (!isMounted) {
-        return null;
-    }
-
+  if (user) {
+    const userInitial = user.email ? user.email.charAt(0).toUpperCase() : "U";
     return (
-        <>
-            <Button variant="ghost" asChild>
-                <Link href="/login">Login</Link>
-            </Button>
-            <Button asChild>
-                <Link href="/signup">Sign Up</Link>
-            </Button>
-        </>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+            <Avatar className="h-8 w-8">
+              <AvatarFallback>{userInitial}</AvatarFallback>
+            </Avatar>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56" align="end" forceMount>
+          <DropdownMenuLabel className="font-normal">
+            <div className="flex flex-col space-y-1">
+              <p className="text-sm font-medium leading-none">My Account</p>
+              <p className="text-xs leading-none text-muted-foreground">
+                {user.email}
+              </p>
+            </div>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={handleLogout}>
+            <LogOut className="mr-2 h-4 w-4" />
+            <span>Log out</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     );
+  }
+
+  return (
+    <>
+      <Button variant="ghost" asChild>
+        <Link href="/login">Login</Link>
+      </Button>
+      <Button asChild>
+        <Link href="/signup">Sign Up</Link>
+      </Button>
+    </>
+  );
 }
+
 
 function NavLinks() {
   const pathname = usePathname();
-  const [isMounted, setIsMounted] = React.useState(false);
-
-  React.useEffect(() => {
-      setIsMounted(true);
-  }, []);
-
-  if (!isMounted) {
-      // Render placeholder or nothing on the server
-      return (
-        <div className="flex items-center space-x-6 text-sm font-medium">
-            {navLinks.map((link) => (
-                <span key={link.href} className="text-muted-foreground">{link.label}</span>
-            ))}
-        </div>
-      );
-  }
-
   return (
     <>
       {navLinks.map((link) => (
@@ -77,6 +105,12 @@ function NavLinks() {
 
 export function Header() {
   const pathname = usePathname();
+  const [isClient, setIsClient] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
+
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-sm">
@@ -88,10 +122,10 @@ export function Header() {
           </span>
         </Link>
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          <NavLinks />
+          {isClient && <NavLinks />}
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2">
-           <AuthButtons />
+           {isClient && <AuthButtons />}
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
