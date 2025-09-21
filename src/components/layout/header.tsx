@@ -64,20 +64,19 @@ export function Header() {
         </Link>
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
           {navLinks.map((link) => (
-            <React.Fragment key={link.href}>
-              {renderNavLink(link.href, link.label)}
-            </React.Fragment>
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                "transition-colors hover:text-primary",
+                pathname.startsWith(link.href) ? "text-primary font-semibold" : "text-muted-foreground"
+              )}
+            >
+              {link.label}
+            </Link>
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-4">
-          <nav className="hidden md:flex items-center space-x-2">
-            <Button variant="ghost" asChild>
-              <Link href="/login">Login</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/signup">Sign Up</Link>
-            </Button>
-          </nav>
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
@@ -94,18 +93,17 @@ export function Header() {
               </Link>
               <div className="flex flex-col space-y-4">
                 {navLinks.map((link) => (
-                  <React.Fragment key={link.href}>
-                    {renderNavLink(link.href, link.label, "text-lg")}
-                  </React.Fragment>
+                   <Link
+                      key={link.href}
+                      href={link.href}
+                      className={cn(
+                        "text-lg transition-colors hover:text-primary",
+                        pathname.startsWith(link.href) ? "text-primary font-semibold" : "text-muted-foreground"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
                 ))}
-              </div>
-              <div className="mt-6 flex flex-col space-y-2">
-                 <Button variant="outline" asChild>
-                    <Link href="/login">Login</Link>
-                 </Button>
-                 <Button asChild>
-                    <Link href="/signup">Sign Up</Link>
-                 </Button>
               </div>
             </SheetContent>
           </Sheet>

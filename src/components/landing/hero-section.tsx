@@ -31,9 +31,6 @@ export function HeroSection() {
           <Button size="lg" asChild>
             <Link href="/student">Explore Lessons</Link>
           </Button>
-          <Button size="lg" variant="secondary" asChild>
-            <Link href="/login">Teacher Login</Link>
-          </Button>
         </div>
       </div>
     </section>
