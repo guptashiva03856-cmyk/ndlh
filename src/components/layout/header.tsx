@@ -11,9 +11,7 @@ import { Menu, School } from "lucide-react";
 
 const navLinks = [
   { href: "/student", label: "Student" },
-  { href: "/student/lessons", label: "Lessons" },
-  { href: "/student/games", label: "Games" },
-  { href: "/student/quizzes", label: "Quizzes" },
+  { href: "/teacher", label: "Teacher" },
 ];
 
 function AuthButtons() {
